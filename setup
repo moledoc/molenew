@@ -1,0 +1,78 @@
+#!/bin/sh
+
+# Script to set up my debian environment.
+
+set -xe
+
+user=${who}
+user=${user%% *}
+
+# packages
+privilege="doas"
+developer="git wget curl vim-gtk exuberant-ctags golang tmux"
+# vim-gtk allows to copy to system clipboard
+# exuberant-ctags for vim autocomplete
+utility="htop xclip zip unzip"
+entertainment="vlc transmission"
+markup="texlive-full pandoc"
+packages_list="$privilege $developer $utility $entertainment" # $markup
+
+su -c "apt update -y && apt upgrade -y; \ 
+apt install --dry-run $packages_list; \
+apt install $packages_list; \
+printf \"permit nopass ${user}\" > /usr/local/etc/doas.conf; \
+printf \"permit nopass ${user}\" > sudo tee /etc/doas.conf;"
+
+printf "Insert git user: "
+read git_user
+git config --global user.name "$git_user"
+printf "Insert git email: "
+read git_email
+git config --global user.email "$git_email"
+
+
+docs="/home/$user/Documents"
+mkdir -p $docs
+repo_loc="$docs/molecurrent"
+git clone git@github.com:moledoc/molecurrent.git $repo_loc
+
+printf "Link configuration from repo"
+ln -s "$repo_loc/.vimrc" "/home/$user/.vimrc"
+# TODO: add other config files
+
+# Install external programs from .deb files
+function install_deb(){
+	doas -- dpkg -i $1
+	rm -f $1
+}
+# Google Chrome
+wget --show-progress "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
+install_deb "google-chrome-stable_current_amd64.deb"
+# AppImageLauncher
+wget --show-progress "https://github.com/TheAssassin/AppImageLauncher/releases/download/v2.2.0/appimagelauncher_2.2.0-travis995.0f91801.bionic_amd64.deb"
+install_deb "appimagelauncher_2.2.0-travis995.0f91801.bionic_amd64.deb"
+# Bazecor
+wget --show-progress "https://github.com/Dygmalab/Bazecor/releases/download/bazecor-0.3.3/Bazecor-0.3.3.AppImage"
+mkdir -p /home/$user/Applications
+mv Bazecor-0.3.3.AppImage /home/$user/Applications
+chmod +x /home/$user/Applications/Bazecor-0.3.3.AppImage
+/home/$user/Applications/Bazecor-0.3.3.AppImage&
+
+# Digidoc
+curl https://installer.id.ee/media/install-scripts/install-open-eid.sh > "/home/$user"/Downloads/install-open-eid.sh
+chmod +x "/home/$user"/Downloads/install-open-eid.sh
+sh "/home/$user"/Downloads/install-open-eid.sh
+
+# Go tools
+go get -u golang.org/x/tools/cmd/goimports 
+go get -u golang.org/x/tools/cmd/godoc
+go get -u golang.org/x/lint/golint
+
+# generate git ssh keys
+if [ ! -d "/home/$user/.ssh" ]; then mkdir -v /home/$user/.ssh; fi
+ssh-keygen -t rsa -b 4096 -C "$git_email" -f /home/$user/.ssh/git_key -P ""
+xclip -selection clipboard < /home/$user/.ssh/git_key.pub
+firefox "github.com/login" > /dev/null
+
+# logout
+gnome-session-quit --force
