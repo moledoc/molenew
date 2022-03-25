@@ -8,6 +8,7 @@ user=${who}
 user=${user%% *}
 
 # packages
+gui="gnome-core"
 privilege="doas"
 developer="git wget curl vim-gtk exuberant-ctags golang tmux"
 # vim-gtk allows to copy to system clipboard
@@ -15,7 +16,7 @@ developer="git wget curl vim-gtk exuberant-ctags golang tmux"
 utility="htop xclip zip unzip"
 entertainment="vlc transmission"
 markup="texlive-full pandoc"
-packages_list="$privilege $developer $utility $entertainment" # $markup
+packages_list="$gui $privilege $developer $utility $entertainment" # $markup
 
 su -c "apt update -y && apt upgrade -y; \ 
 apt install --dry-run $packages_list; \
@@ -68,11 +69,7 @@ go get -u golang.org/x/tools/cmd/goimports
 go get -u golang.org/x/tools/cmd/godoc
 go get -u golang.org/x/lint/golint
 
-# generate git ssh keys
-if [ ! -d "/home/$user/.ssh" ]; then mkdir -v /home/$user/.ssh; fi
-ssh-keygen -t rsa -b 4096 -C "$git_email" -f /home/$user/.ssh/git_key -P ""
-xclip -selection clipboard < /home/$user/.ssh/git_key.pub
-firefox "github.com/login" > /dev/null
-
-# logout
-gnome-session-quit --force
+# # logout
+# gnome-session-quit --force
+# reboot
+su -c "systemctl reboot"

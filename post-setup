@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# Script to post set up my debian environment
+
+set -xe
+
+user=${who}
+user=${user%% *}
+
+# generate git ssh keys
+if [ ! -d "/home/$user/.ssh" ]; then mkdir -v /home/$user/.ssh; fi
+ssh-keygen -t rsa -b 4096 -C "$git_email" -f /home/$user/.ssh/git_key -P ""
+xclip -selection clipboard < /home/$user/.ssh/git_key.pub
+google-chrome "github.com/login" > /dev/null
