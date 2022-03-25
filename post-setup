@@ -4,9 +4,9 @@
 
 set -xe
 
-user=${who}
-user=${user%% *}
-
+user=$(who)
+5
+5
 printf "Insert git user: "
 read git_user
 printf "Insert git email: "
@@ -18,9 +18,14 @@ git config --global user.email "$git_email"
 docs="/home/$user/Documents"
 mkdir -p $docs
 repo_loc="$docs/molecurrent"
-git clone git@github.com:moledoc/molecurrent.git $repo_loc
+rm -rfv $repo_loc
+git clone https://github.com/moledoc/molecurrent.git $repo_loc
+cd $repo_loc
+git remote set-url origin git@github.com:moledoc/molecurrent.git
+cd -
 
 printf "Link configuration from repo"
+rm -vf /home/$user/.vimrc /home/$user/.bashrc /home/$user/.profile
 ln -s "$repo_loc/.vimrc" "/home/$user/.vimrc"
 ln -s "$repo_loc/.bashrc" "/home/$user/.bashrc"
 ln -s "$repo_loc/.profile" "/home/$user/.profile"
@@ -32,6 +37,7 @@ function install_deb(){
 	rm -f $1
 }
 # Google Chrome
+doas -- apt install fonts-liberation
 wget --show-progress "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
 install_deb "google-chrome-stable_current_amd64.deb"
 # AppImageLauncher
@@ -46,8 +52,9 @@ chmod +x /home/$user/Applications/Bazecor-0.3.3.AppImage
 
 # Digidoc
 curl https://installer.id.ee/media/install-scripts/install-open-eid.sh > "/home/$user"/Downloads/install-open-eid.sh
-chmod +x "/home/$user"/Downloads/install-open-eid.sh
-sh "/home/$user"/Downloads/install-open-eid.sh
+sed -i 's/sudo/doas/g' /home/$user/Downloads/install-open-eid.sh
+chmod +x /home/$user/Downloads/install-open-eid.sh
+/home/$user/Downloads/install-open-eid.sh
 
 # Go tools
 go get -u golang.org/x/tools/cmd/goimports 
@@ -60,3 +67,4 @@ ssh-keygen -t rsa -b 4096 -C "$git_email" -f /home/$user/.ssh/git_key -P ""
 xclip -selection clipboard < /home/$user/.ssh/git_key.pub
 google-chrome "github.com/login" > /dev/null
 
+rm -v setup post-setup

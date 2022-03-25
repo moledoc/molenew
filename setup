@@ -19,8 +19,7 @@ markup="texlive-full pandoc zathura zathura-pdf-poppler"
 packages_list="$gui $privilege $developer $utility $entertainment" # $markup
 
 su -c "apt update -y && apt upgrade -y; \ 
-apt install --dry-run $packages_list; \
-apt install -y $packages_list; \
 printf \"permit nopass ${user}\" > /usr/local/etc/doas.conf; \
-printf \"permit nopass ${user}\" > sudo tee /etc/doas.conf; \
-systemctl reboot"
+printf \"permit nopass ${user}\" > /etc/doas.conf; \
+apt install --dry-run $packages_list; \
+apt install -y $packages_list" 
