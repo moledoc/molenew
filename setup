@@ -7,11 +7,6 @@ set -xe
 user=$(who)
 user=${user%% *}
 
-printf "Insert git user: "
-read git_user
-printf "Insert git email: "
-read git_email
-
 # packages
 gui="gnome-core"
 privilege="doas"
@@ -27,49 +22,5 @@ su -c "apt update -y && apt upgrade -y; \
 apt install --dry-run $packages_list; \
 apt install -y $packages_list; \
 printf \"permit nopass ${user}\" > /usr/local/etc/doas.conf; \
-printf \"permit nopass ${user}\" > sudo tee /etc/doas.conf;"
-
-git config --global user.name "$git_user"
-git config --global user.email "$git_email"
-
-docs="/home/$user/Documents"
-mkdir -p $docs
-repo_loc="$docs/molecurrent"
-git clone git@github.com:moledoc/molecurrent.git $repo_loc
-
-printf "Link configuration from repo"
-ln -s "$repo_loc/.vimrc" "/home/$user/.vimrc"
-# TODO: add other config files
-
-# Install external programs from .deb files
-function install_deb(){
-	doas -- dpkg -i $1
-	rm -f $1
-}
-# Google Chrome
-wget --show-progress "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
-install_deb "google-chrome-stable_current_amd64.deb"
-# AppImageLauncher
-wget --show-progress "https://github.com/TheAssassin/AppImageLauncher/releases/download/v2.2.0/appimagelauncher_2.2.0-travis995.0f91801.bionic_amd64.deb"
-install_deb "appimagelauncher_2.2.0-travis995.0f91801.bionic_amd64.deb"
-# Bazecor
-wget --show-progress "https://github.com/Dygmalab/Bazecor/releases/download/bazecor-0.3.3/Bazecor-0.3.3.AppImage"
-mkdir -p /home/$user/Applications
-mv Bazecor-0.3.3.AppImage /home/$user/Applications
-chmod +x /home/$user/Applications/Bazecor-0.3.3.AppImage
-/home/$user/Applications/Bazecor-0.3.3.AppImage&
-
-# Digidoc
-curl https://installer.id.ee/media/install-scripts/install-open-eid.sh > "/home/$user"/Downloads/install-open-eid.sh
-chmod +x "/home/$user"/Downloads/install-open-eid.sh
-sh "/home/$user"/Downloads/install-open-eid.sh
-
-# Go tools
-go get -u golang.org/x/tools/cmd/goimports 
-go get -u golang.org/x/tools/cmd/godoc
-go get -u golang.org/x/lint/golint
-
-# # logout
-# gnome-session-quit --force
-# reboot
-su -c "systemctl reboot"
+printf \"permit nopass ${user}\" > sudo tee /etc/doas.conf; \
+systemctl reboot"
