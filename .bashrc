@@ -178,3 +178,6 @@ alias gob="go build"
 alias goc="go clean"
 alias got="go test -v -cover"
 alias gobw="GOOS=windows GOARCH=amd64 go build"
+
+# utiliteis
+alias wget="wget --show-progress"
