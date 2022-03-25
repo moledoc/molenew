@@ -4,8 +4,13 @@
 
 set -xe
 
-user=${who}
+user=$(who)
 user=${user%% *}
+
+printf "Insert git user: "
+read git_user
+printf "Insert git email: "
+read git_email
 
 # packages
 gui="gnome-core"
@@ -15,22 +20,17 @@ developer="git wget curl vim-gtk exuberant-ctags golang tmux"
 # exuberant-ctags for vim autocomplete
 utility="htop xclip zip unzip"
 entertainment="vlc transmission"
-markup="texlive-full pandoc"
+markup="texlive-full pandoc zathura zathura-pdf-poppler"
 packages_list="$gui $privilege $developer $utility $entertainment" # $markup
 
 su -c "apt update -y && apt upgrade -y; \ 
 apt install --dry-run $packages_list; \
-apt install $packages_list; \
+apt install -y $packages_list; \
 printf \"permit nopass ${user}\" > /usr/local/etc/doas.conf; \
 printf \"permit nopass ${user}\" > sudo tee /etc/doas.conf;"
 
-printf "Insert git user: "
-read git_user
 git config --global user.name "$git_user"
-printf "Insert git email: "
-read git_email
 git config --global user.email "$git_email"
-
 
 docs="/home/$user/Documents"
 mkdir -p $docs

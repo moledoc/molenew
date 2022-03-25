@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# Script to set up my debian environment.
+
+set -xe
+
+user=$(who)
+user=${user%% *}
+
+# packages
+gui="gnome-core"
+privilege="doas"
+developer="git wget curl vim-gtk exuberant-ctags golang tmux"
+# vim-gtk allows to copy to system clipboard
+# exuberant-ctags for vim autocomplete
+utility="htop xclip zip unzip"
+entertainment="vlc transmission"
+markup="texlive-full pandoc zathura zathura-pdf-poppler"
+packages_list="$gui $privilege $developer $utility $entertainment" # $markup
+
+su -c "apt remove -y --autoremove $packages_list; \
+	apt list --installed | grep gnome | sed 's/\/.*//g' | xargs -I {} apt remove -y --autoremove \"{}\"; \
+	systemctl reboot"
