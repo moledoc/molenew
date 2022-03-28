@@ -5,8 +5,8 @@
 set -xe
 
 user=$(who)
-5
-5
+user=${user%% *}
+
 printf "Insert git user: "
 read git_user
 printf "Insert git email: "
@@ -18,13 +18,14 @@ git config --global user.email "$git_email"
 docs="/home/$user/Documents"
 mkdir -p $docs
 repo_loc="$docs/molecurrent"
-rm -rfv $repo_loc
-git clone https://github.com/moledoc/molecurrent.git $repo_loc
+# rm -rfv $repo_loc
+# git clone https://github.com/moledoc/molecurrent.git $repo_loc
+git clone https://github.com/moledoc/molenew.git $repo_loc
 cd $repo_loc
 git remote set-url origin git@github.com:moledoc/molecurrent.git
 cd -
 
-printf "Link configuration from repo"
+printf "Link configuration from repo\n"
 rm -vf /home/$user/.vimrc /home/$user/.bashrc /home/$user/.profile
 ln -s "$repo_loc/.vimrc" "/home/$user/.vimrc"
 ln -s "$repo_loc/.bashrc" "/home/$user/.bashrc"
@@ -62,7 +63,7 @@ go get -u golang.org/x/tools/cmd/godoc
 go get -u golang.org/x/lint/golint
 
 # generate git ssh keys
-if [ ! -d "/home/$user/.ssh" ]; then mkdir -v /home/$user/.ssh; fi
+mkdir -p /home/$user/.ssh
 ssh-keygen -t rsa -b 4096 -C "$git_email" -f /home/$user/.ssh/git_key -P ""
 xclip -selection clipboard < /home/$user/.ssh/git_key.pub
 google-chrome "github.com/login" > /dev/null
