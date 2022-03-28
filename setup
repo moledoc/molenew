@@ -18,6 +18,13 @@ entertainment="vlc transmission"
 markup="texlive-full pandoc zathura zathura-pdf-poppler"
 packages_list="$gui $privilege $developer $utility $entertainment" # $markup
 
+printf "Get the post-setup script and set it to autostart\n"
+wget raw.githubusercontent.com/moledoc/molenew/post-setup
+mkdir -p /home/$user/.config/autostart
+chmod +x post-setup
+mv post-setup /home/$user/.config/autostart
+
+printf "Update && upgrade system\nSetup doas\nInstall packages\nReboot\n"
 su -c "apt update -y && apt upgrade -y; \ 
 printf \"permit nopass ${user}\n\" > /usr/local/etc/doas.conf; \
 printf \"permit nopass ${user}\n\" > /etc/doas.conf; \

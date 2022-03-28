@@ -15,6 +15,7 @@ read git_email
 git config --global user.name "$git_user"
 git config --global user.email "$git_email"
 
+printf "Cloning molecurrent repo\n"
 docs="/home/$user/Documents"
 mkdir -p $docs
 repo_loc="$docs/molecurrent"
@@ -32,8 +33,8 @@ ln -s "$repo_loc/.bashrc" "/home/$user/.bashrc"
 ln -s "$repo_loc/.profile" "/home/$user/.profile"
 # TODO: add other config files
 
-# Install external programs from .deb files
-function install_deb(){
+printf "Install external programs from .deb files\n"
+install_deb(){
 	doas -- dpkg -i $1
 	rm -f $1
 }
@@ -52,20 +53,24 @@ chmod +x /home/$user/Applications/Bazecor-0.3.3.AppImage
 /home/$user/Applications/Bazecor-0.3.3.AppImage&
 
 # Digidoc
+printf "Install digidoc\n"
 curl https://installer.id.ee/media/install-scripts/install-open-eid.sh > "/home/$user"/Downloads/install-open-eid.sh
 sed -i 's/sudo/doas/g' /home/$user/Downloads/install-open-eid.sh
 chmod +x /home/$user/Downloads/install-open-eid.sh
 /home/$user/Downloads/install-open-eid.sh
 
 # Go tools
+printf "Install golang tools\n"
 go get -u golang.org/x/tools/cmd/goimports 
 go get -u golang.org/x/tools/cmd/godoc
 go get -u golang.org/x/lint/golint
 
-# generate git ssh keys
+printf "generate git ssh keys\n"
 mkdir -p /home/$user/.ssh
 ssh-keygen -t rsa -b 4096 -C "$git_email" -f /home/$user/.ssh/git_key -P ""
 xclip -selection clipboard < /home/$user/.ssh/git_key.pub
 google-chrome "github.com/login" > /dev/null
 
-rm -v setup post-setup
+printf "Cleanup\n"
+rm -v setup
+rm -v /home/$user/.config/autostart/post-setup
