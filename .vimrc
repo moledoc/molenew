@@ -191,7 +191,7 @@ function! Grep(word,flag)
     elseif a:word == "" && a:flag == "-todo"
         let l:word = "TODO:\\\\|NOTE:\\\\|HACK:\\\\|DEBUG:\\\\|FIXME:\\\\|REVIEW:\\\\|BUG:\\\\|TEST:\\\\|TESTME:\\\\|MAYBE:"
     endif
-	execute "vert term grep -rn --binary-files=without-match --exclude-dir=.git --exclude-dir=.cache --exclude=tags --exclude=*.swp --color=always \"" . l:word . "\""
+	execute "vert term grep -rni --binary-files=without-match --exclude-dir=.git --exclude-dir=.cache --exclude=tags --exclude=*.swp --color=always \"" . l:word . "\" ."
 endfunction
 nnoremap <C-f> :call Grep("","")<CR>
 if !exists(":F")
@@ -219,6 +219,8 @@ vmap gu <Esc>:call SeeUrl()<CR>
 " Although, I am using some of my own external programs (see Grep()).
 " Currently supporting line comments only.
 function! Commentary()
+	" default comment
+	let l:comment = "# "
     let l:ext = expand('%:e')
     let l:col = virtcol('.')
 	let l:twosided = 0

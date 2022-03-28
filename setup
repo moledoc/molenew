@@ -10,7 +10,7 @@ user=${user%% *}
 # packages
 gui="gnome-core"
 privilege="doas"
-developer="git wget curl vim-gtk exuberant-ctags golang tmux"
+developer="git wget curl vim-gtk exuberant-ctags golang"
 # vim-gtk allows to copy to system clipboard
 # exuberant-ctags for vim autocomplete
 utility="htop xclip zip unzip"
