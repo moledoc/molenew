@@ -31,7 +31,6 @@ rm -vf /home/$user/.vimrc /home/$user/.bashrc /home/$user/.profile
 ln -s "$repo_loc/.vimrc" "/home/$user/.vimrc"
 ln -s "$repo_loc/.bashrc" "/home/$user/.bashrc"
 ln -s "$repo_loc/.profile" "/home/$user/.profile"
-# TODO: add other config files
 
 printf "Install external programs from .deb files\n"
 install_deb(){
@@ -52,12 +51,12 @@ mv Bazecor-0.3.3.AppImage /home/$user/Applications
 chmod +x /home/$user/Applications/Bazecor-0.3.3.AppImage
 /home/$user/Applications/Bazecor-0.3.3.AppImage&
 
-# Digidoc
-printf "Install digidoc\n"
-curl https://installer.id.ee/media/install-scripts/install-open-eid.sh > "/home/$user"/Downloads/install-open-eid.sh
-sed -i 's/sudo/doas/g' /home/$user/Downloads/install-open-eid.sh
-chmod +x /home/$user/Downloads/install-open-eid.sh
-/home/$user/Downloads/install-open-eid.sh
+# # Digidoc
+# printf "Install digidoc\n"
+# curl https://installer.id.ee/media/install-scripts/install-open-eid.sh > "/home/$user"/Downloads/install-open-eid.sh
+# sed -i 's/sudo/doas/g' /home/$user/Downloads/install-open-eid.sh
+# chmod +x /home/$user/Downloads/install-open-eid.sh
+# /home/$user/Downloads/install-open-eid.sh
 
 # Go tools
 printf "Install golang tools\n"
@@ -69,8 +68,7 @@ printf "generate git ssh keys\n"
 mkdir -p /home/$user/.ssh
 ssh-keygen -t rsa -b 4096 -C "$git_email" -f /home/$user/.ssh/git_key -P ""
 xclip -selection clipboard < /home/$user/.ssh/git_key.pub
-google-chrome "github.com/login" > /dev/null
+google-chrome "github.com/login" &
 
 printf "Cleanup\n"
-rm -v setup
-rm -v /home/$user/.config/autostart/post-setup
+rm -v setup post-setup

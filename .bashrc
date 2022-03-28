@@ -101,13 +101,13 @@ fi
 # aliases
 
 # apt
-alias update="${elevate} apt update;${elevate} apt upgrade -y"
-alias install="${elevate} apt install"
-alias debinstall="${elevate} dpkg -i"
-alias dryinstall="${elevate} apt install --dry-run"
-alias uninstall="${elevate} apt remove"
-alias purge="${elevate} apt purge"
-alias autoremove="${elevate} apt autoremove"
+alias update="${ELEVATE} apt update;${ELEVATE} apt upgrade -y"
+alias install="${ELEVATE} apt install"
+alias debinstall="${ELEVATE} dpkg -i"
+alias dryinstall="${ELEVATE} apt install --dry-run"
+alias uninstall="${ELEVATE} apt remove --auto-remove"
+alias purge="${ELEVATE} apt purge"
+alias autoremove="${ELEVATE} apt autoremove"
 alias search="apt search"
 alias show="apt show"
 alias list="apt list"
