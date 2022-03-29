@@ -5,6 +5,7 @@ filetype plugin indent on
 set clipboard=unnamedplus   " using system clipboard (unnamedplus) needs vim with +clipboard 
                             " (vim  --version | grep clipboard)
                             " for ubuntu use vim-gtk package
+							" unnamed for windows
 set nocompatible            " make vim not compatible with vi (this way vim is more consistent)
 set tabstop=4               " tab is 4 chars long
 set shiftwidth=4            " how many chars are shifted by for example > and < 
@@ -19,13 +20,14 @@ set incsearch               " incremental search
 set hlsearch                " highlight search
 set autochdir               " when switching file, change wd in vim as well
 set ruler                   " denote line, col in bottom right of the buffer
-" set shell=/usr/bin/dash     " set vim terminal shell
 set wildmenu                " show search menu in vim command mode
 set mouse=a                 " enable mouse in every mode
 set encoding=utf-8          " sets the encoding used
 set fileencoding=utf-8      " sets the encoding for the file/buffer
 set showcmd                 " Show (partial) command in the last line of the screen
-" colorscheme morning         " light colorscheme
+set path+=**
+set modifiable
+set wildignore+=*.git,*.swp,tags
 
 " netrw (file explorer)
 " % makes new file while in Explorer
@@ -135,7 +137,10 @@ au Syntax c runtime! syntax/c.vim
 au Syntax go runtime! syntax/go.vim
 set tags=./tags;,tags;                        " search tags in ./ dir and/or recurse upward
 " auto generate ctags when opening a file with specified extension
-autocmd BufRead,BufNewFile,BufWritePost *.{go,py,r,cpp,h,c,sql} silent execute "!ctags -R -a --exclude=.git&"
+autocmd BufRead,BufNewFile,BufWritePost *.{go,py,r,cpp,h,c,sql} silent execute "!ctags -R -a --exclude=.git"
+" <package manager> install exhuberant-ctags
+" autocmd BufRead,BufNewFile,BufWritePost *.{go,py,r,cpp,h,c,sql} silent execute "!ctags.exe -R -a --exclude=.git"
+" choco install universal-ctags
 
 " ctags for function/variable specific completion
 " <C-x>] for ctags based completion
@@ -187,11 +192,13 @@ function! Grep(word,flag)
         let l:word = expand('<cword>')
     elseif a:word != ""
         let l:word = substitute(a:word," ","\" \"","g")
-        let l:word = substitute(a:word,"|","\\\\\\\\|","g")
+        " let l:word = substitute(a:word,"|","\\\\\\\\|","g")
     elseif a:word == "" && a:flag == "-todo"
-        let l:word = "TODO:\\\\|NOTE:\\\\|HACK:\\\\|DEBUG:\\\\|FIXME:\\\\|REVIEW:\\\\|BUG:\\\\|TEST:\\\\|TESTME:\\\\|MAYBE:"
+        let l:word = "TODO:\\|NOTE:\\|HACK:\\|DEBUG:\\|FIXME:\\|REVIEW:\\|BUG:\\|TEST:\\|TESTME:\\|MAYBE:"
     endif
-	execute "vert term grep -rni --binary-files=without-match --exclude-dir=.git --exclude-dir=.cache --exclude=tags --exclude=*.swp --color=always \"" . l:word . "\" ."
+	" execute "vert term grep -rni --binary-files=without-match --exclude-dir=.git --exclude-dir=.cache --exclude=tags --exclude=*.swp --color=always \"" . l:word . "\""
+	execute "lvimgrep /\\c" . l:word . "/gj **/*"
+	execute "lopen"
 endfunction
 nnoremap <C-f> :call Grep("","")<CR>
 if !exists(":F")
@@ -219,7 +226,6 @@ vmap gu <Esc>:call SeeUrl()<CR>
 " Although, I am using some of my own external programs (see Grep()).
 " Currently supporting line comments only.
 function! Commentary()
-	" default comment
 	let l:comment = "# "
     let l:ext = expand('%:e')
     let l:col = virtcol('.')
@@ -228,7 +234,7 @@ function! Commentary()
     if l:ext == "go" || l:ext == "c" || l:ext == "cpp"
         let l:comment = "// "
     " vim
-    elseif l:ext == "vim" || expand('%') == ".vimrc"
+    elseif l:ext == "vim" || expand('%') == ".vimrc" || expand('%') == "_vimrc"
         let l:comment = "\" "
     " sql
     elseif l:ext == "sql"
@@ -237,7 +243,7 @@ function! Commentary()
     elseif l:ext == "py"
         let l:comment = "# "
     " shell
-    elseif l:ext == "sh" || l:ext == "zsh" || l:ext == "bash" || expand('%') == ".bashrc"
+    elseif l:ext == "sh" || l:ext == "zsh" || l:ext == "bash" || expand('%') == ".bashrc" || expand('%') == "_bashrc"
         let l:comment = "# "
     " html (and md)
     elseif l:ext == "html" || l:ext == "md"
@@ -270,6 +276,8 @@ function! Commentary()
 endfunction
 nnoremap <C-_> :call Commentary()<CR>
 vnoremap <C-_> :call Commentary()<CR>
+nnoremap <C-/> :call Commentary()<CR>
+noremap <C-/> :call Commentary()<CR>
 
 
 " git
@@ -320,6 +328,11 @@ if !exists(":GD")
     command GDC call GitDiffClose()
 endif
 
+" autogroups for makeprg
+augroup auMakeprg
+	autocmd Filetype go setlocal makeprg=go\ build
+augroup END
+
 " autocommands for Golang files
 function! VIMGO()
 	silent execute "!goimports -w % && gofmt -s -e -w % && go vet % && golint %"
@@ -328,7 +341,6 @@ endfunction
 augroup vimGo
     au BufWritePost *.go silent execute "call VIMGO()"
 augroup END
-
 
 
 " F4 to compile a program
