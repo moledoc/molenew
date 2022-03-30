@@ -4,13 +4,17 @@
 
 set -xe
 
+
+# for ubuntu, comment out for debian
+sudo passwd
+
 user=$(who)
 user=${user%% *}
 
 # packages
 gui="gnome-core"
-privilege="doas"
-developer="git wget curl vim-gtk exuberant-ctags golang tmux"
+privilege="sudo doas"
+developer="git curl vim-gtk exuberant-ctags golang tmux"
 # vim-gtk allows to copy to system clipboard
 # exuberant-ctags for vim autocomplete
 utility="htop xclip zip unzip"

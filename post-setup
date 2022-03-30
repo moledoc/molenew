@@ -19,7 +19,7 @@ printf "Cloning molecurrent repo\n"
 docs="/home/$user/Documents"
 mkdir -p $docs
 repo_loc="$docs/molecurrent"
-# rm -rfv $repo_loc
+rm -rfv $repo_loc
 # git clone https://github.com/moledoc/molecurrent.git $repo_loc
 git clone https://github.com/moledoc/molenew.git $repo_loc
 cd $repo_loc
@@ -51,18 +51,18 @@ mv Bazecor-0.3.3.AppImage /home/$user/Applications
 chmod +x /home/$user/Applications/Bazecor-0.3.3.AppImage
 /home/$user/Applications/Bazecor-0.3.3.AppImage&
 
-# # Digidoc
-# printf "Install digidoc\n"
-# curl https://installer.id.ee/media/install-scripts/install-open-eid.sh > "/home/$user"/Downloads/install-open-eid.sh
-# sed -i 's/sudo/doas/g' /home/$user/Downloads/install-open-eid.sh
-# chmod +x /home/$user/Downloads/install-open-eid.sh
-# /home/$user/Downloads/install-open-eid.sh
+# Digidoc
+printf "Install digidoc\n"
+curl https://installer.id.ee/media/install-scripts/install-open-eid.sh > "/home/$user"/Downloads/install-open-eid.sh
+sed -i 's/sudo/doas/g' /home/$user/Downloads/install-open-eid.sh
+chmod +x /home/$user/Downloads/install-open-eid.sh
+/home/$user/Downloads/install-open-eid.sh
 
 # Go tools
 printf "Install golang tools\n"
-go get -u golang.org/x/tools/cmd/goimports 
-go get -u golang.org/x/tools/cmd/godoc
-go get -u golang.org/x/lint/golint
+go install golang.org/x/tools/cmd/goimports @latest
+go install golang.org/x/tools/cmd/godoc@latest
+go install golang.org/x/lint/golint@latest
 
 printf "generate git ssh keys\n"
 mkdir -p /home/$user/.ssh
