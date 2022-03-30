@@ -60,7 +60,7 @@ chmod +x /home/$user/Downloads/install-open-eid.sh
 
 # Go tools
 printf "Install golang tools\n"
-go install golang.org/x/tools/cmd/goimports @latest
+go install golang.org/x/tools/cmd/goimports@latest
 go install golang.org/x/tools/cmd/godoc@latest
 go install golang.org/x/lint/golint@latest
 
