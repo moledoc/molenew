@@ -335,8 +335,14 @@ augroup END
 
 " autocommands for Golang files
 function! VIMGO()
-	silent execute "!goimports -w % && gofmt -s -e -w % && go vet % && golint %"
+	silent execute "!goimports -w %"
+	silent execute "!gofmt -s -e -w %"
+	" silent execute "!go vet % > out"
+	silent execute "!golint % > out"
 	silent execute "e! %"
+	silent execute "redraw!"
+	silent execute "cfile out"
+	execute "copen"
 endfunction
 augroup vimGo
     au BufWritePost *.go silent execute "call VIMGO()"
