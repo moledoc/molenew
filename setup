@@ -26,6 +26,7 @@ printf "Update && upgrade system\nSetup doas\nInstall packages\nReboot\n"
 su -c "apt update -y && apt upgrade -y; \ 
 printf \"permit nopass ${user}\n\" > /usr/local/etc/doas.conf; \
 printf \"permit nopass ${user}\n\" > /etc/doas.conf; \
+printf \"\\\"\\C-l\\\": clear-screen\" >> /etc/inputrc; \
 apt install --dry-run $packages_list; \
 apt install -y $packages_list; \
 systemctl reboot" 
