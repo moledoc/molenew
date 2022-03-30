@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Script to post set up my debian environment
+# Script to post set up my environment
 
 set -xe
 
@@ -37,28 +37,23 @@ install_deb(){
 	doas -- dpkg -i $1
 	rm -f $1
 }
-# Google Chrome
 doas -- apt install fonts-liberation
 wget --show-progress "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
 install_deb "google-chrome-stable_current_amd64.deb"
-# AppImageLauncher
 wget --show-progress "https://github.com/TheAssassin/AppImageLauncher/releases/download/v2.2.0/appimagelauncher_2.2.0-travis995.0f91801.bionic_amd64.deb"
 install_deb "appimagelauncher_2.2.0-travis995.0f91801.bionic_amd64.deb"
-# Bazecor
 wget --show-progress "https://github.com/Dygmalab/Bazecor/releases/download/bazecor-0.3.3/Bazecor-0.3.3.AppImage"
 mkdir -p /home/$user/Applications
 mv Bazecor-0.3.3.AppImage /home/$user/Applications
 chmod +x /home/$user/Applications/Bazecor-0.3.3.AppImage
 /home/$user/Applications/Bazecor-0.3.3.AppImage&
 
-# Digidoc
 printf "Install digidoc\n"
 curl https://installer.id.ee/media/install-scripts/install-open-eid.sh > "/home/$user"/Downloads/install-open-eid.sh
 sed -i 's/sudo/doas/g' /home/$user/Downloads/install-open-eid.sh
 chmod +x /home/$user/Downloads/install-open-eid.sh
 /home/$user/Downloads/install-open-eid.sh
 
-# Go tools
 printf "Install golang tools\n"
 go install golang.org/x/tools/cmd/goimports@latest
 go install golang.org/x/tools/cmd/godoc@latest
@@ -68,7 +63,10 @@ printf "generate git ssh keys\n"
 mkdir -p /home/$user/.ssh
 ssh-keygen -t rsa -b 4096 -C "$git_email" -f /home/$user/.ssh/git_key -P ""
 xclip -selection clipboard < /home/$user/.ssh/git_key.pub
-google-chrome "github.com/login" &
+google-chrome "github.com/login"
+
+printf "gnome keybindings\n"
+dconf load /org/gnome/desktop/wm/keybindings/ < $repo_loc/gnome-keybindings
 
 printf "Cleanup\n"
 rm -v setup post-setup brick

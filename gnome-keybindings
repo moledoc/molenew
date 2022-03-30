@@ -1,0 +1,5 @@
+[/]
+begin-resize=@as []
+switch-input-source=['<Alt>Shift_L']
+switch-to-workspace-down=['<Primary><Super>Right']
+switch-to-workspace-up=['<Primary><Super>Left']

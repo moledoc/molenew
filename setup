@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Script to set up my debian environment.
+# Script to set up my environment.
 
 set -xe
 
@@ -8,7 +8,7 @@ user=$(who)
 user=${user%% *}
 
 # packages
-gui="gnome-core"
+gui="gnome-core gnome-screenshot"
 privilege="doas"
 developer="git wget curl vim-gtk exuberant-ctags golang"
 # vim-gtk allows to copy to system clipboard

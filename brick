@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Script to set up my debian environment.
+# Script to brick/clean my environment
 
 set -xe
 
@@ -24,7 +24,7 @@ user=${user%% *}
 # packages
 gui="gnome-core"
 privilege="sudo doas"
-developer="git curl vim-gtk exuberant-ctags golang tmux"
+developer="git curl vim-gtk exuberant-ctags golang"
 # vim-gtk allows to copy to system clipboard
 # exuberant-ctags for vim autocomplete
 utility="htop xclip zip unzip"
