@@ -4,9 +4,18 @@
 
 set -xe
 
-
-# for ubuntu, comment out for debian
-sudo passwd
+distro="${$(cat /etc/issue)%% *}"
+case $distro in
+  *"Debian"*)
+    continue
+    ;;
+  *"Ubuntu"*)
+    sudo passwd
+    ;;
+  *)
+    exit 1
+    ;;
+esac
 
 user=$(who)
 user=${user%% *}
@@ -21,6 +30,10 @@ utility="htop xclip zip unzip"
 entertainment="vlc transmission"
 markup="texlive-full pandoc zathura zathura-pdf-poppler"
 packages_list="$gui $privilege $developer $utility $entertainment" # $markup
+
+printf "Get the setup script\n"
+wget raw.githubusercontent.com/moledoc/molenew/main/setup
+chmod +x setup
 
 su -c "apt remove -y --autoremove $packages_list; \
 	apt list --installed | grep gnome | sed 's/\/.*//g' | xargs -I {} apt remove -y --autoremove \"{}\"; \

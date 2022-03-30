@@ -71,4 +71,4 @@ xclip -selection clipboard < /home/$user/.ssh/git_key.pub
 google-chrome "github.com/login" &
 
 printf "Cleanup\n"
-rm -v setup post-setup
+rm -v setup post-setup brick

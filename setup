@@ -18,7 +18,7 @@ entertainment="vlc transmission"
 markup="texlive-full pandoc zathura zathura-pdf-poppler"
 packages_list="$gui $privilege $developer $utility $entertainment" # $markup
 
-printf "Get the post-setup script and set it to autostart\n"
+printf "Get the post-setup script\n"
 wget raw.githubusercontent.com/moledoc/molenew/main/post-setup
 chmod +x post-setup
 
