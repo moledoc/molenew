@@ -4,7 +4,8 @@
 
 set -xe
 
-distro="${$(cat /etc/issue)%% *}"
+distro=$(cat /etc/issue)
+distro="${$distro%% *}"
 case $distro in
   *"Debian"*)
     continue
