@@ -362,6 +362,7 @@ function! F4()
     elseif l:ext == "go"
         silent execute "make"
 		execute "copen"
+		execute "wincmd p"
         " execute "!go build"
         " execute "redraw!"
 		" execute "vert term ./" . fnamemodify(getcwd(), ':t')
