@@ -15,8 +15,8 @@ developer="git wget curl vim-gtk exuberant-ctags golang"
 # exuberant-ctags for vim autocomplete
 utility="htop xclip zip unzip"
 entertainment="vlc transmission"
-markup="texlive-full pandoc zathura zathura-pdf-poppler"
-packages_list="$gui $privilege $developer $utility $entertainment" # $markup
+markup="texlive pandoc zathura zathura-pdf-poppler"
+packages_list="$gui $privilege $developer $utility" # $entertainment" # $markup
 
 printf "Get the post-setup script\n"
 wget raw.githubusercontent.com/moledoc/molenew/main/post-setup
