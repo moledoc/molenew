@@ -8,7 +8,7 @@ user=$(who)
 user=${user%% *}
 
 # packages
-gui="gnome-core gnome-screenshot"
+gui="gnome-core gnome-screenshot gnome-tweaks"
 privilege="doas"
 developer="git wget curl vim-gtk exuberant-ctags golang"
 # vim-gtk allows to copy to system clipboard

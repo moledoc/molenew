@@ -337,8 +337,9 @@ augroup END
 function! VIMGO()
 	silent execute "!goimports -w %"
 	silent execute "!gofmt -s -e -w %"
-	" silent execute "!go vet % > out"
-	silent execute "!golint % > out"
+	silent execute "!go vet % 2> out"
+	silent execute "!sed -i 's/vet://g' out"
+	silent execute "!golint % >> out"
 	silent execute "e! %"
 	silent execute "redraw!"
 	silent execute "cfile out"
@@ -346,6 +347,7 @@ function! VIMGO()
 endfunction
 augroup vimGo
     au BufWritePost *.go silent execute "call VIMGO()"
+	au VimLeave *.go silent execute "!rm out"
 augroup END
 
 
@@ -358,9 +360,12 @@ function! F4()
 		silent execute "!pandoc --standalone --from markdown --to pdf -t latex --variable papersize=A4 -o " . l:base . ".pdf " . l:base . ".md"
 		silent execute "!zathura " . l:base . ".pdf&"
     elseif l:ext == "go"
-        execute "!go build"
+        silent execute "make"
+		execute "copen"
+		execute "wincmd p"
+        " execute "!go build"
         " execute "redraw!"
-		execute "vert term ./" . fnamemodify(getcwd(), ':t')
+		" execute "vert term ./" . fnamemodify(getcwd(), ':t')
     " elseif l:ext == "<ext>"
         " execute ...
     endif
