@@ -22,7 +22,7 @@ user=$(who)
 user=${user%% *}
 
 # packages
-gui="gnome-core firefox snapd"
+gui="gnome-core firefox snapd gdm3"
 privilege="sudo doas"
 developer="git curl vim-gtk exuberant-ctags golang"
 # vim-gtk allows to copy to system clipboard
