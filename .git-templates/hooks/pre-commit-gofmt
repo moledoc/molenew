@@ -1,0 +1,3 @@
+#!/bin/sh
+
+/usr/local/go/bin/gofmt -s -e -w .

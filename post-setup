@@ -31,6 +31,7 @@ rm -vf /home/$user/.vimrc /home/$user/.bashrc /home/$user/.profile
 ln -s "$repo_loc/.vimrc" "/home/$user/.vimrc"
 ln -s "$repo_loc/.bashrc" "/home/$user/.bashrc"
 ln -s "$repo_loc/.profile" "/home/$user/.profile"
+ln -s "$repo_loc/.git-templates" "/home/$user/.git-templates"
 
 printf "Install external programs from .deb files\n"
 install_deb(){
