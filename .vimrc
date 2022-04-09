@@ -82,11 +82,17 @@ endif
 " make Q quit buffer
 nnoremap <S-q> :q<CR>
 
-" redraw buffer
-nnoremap <C-F5> :redraw!<CR>
+"" redraw buffer
+"nnoremap <C-F5> :redraw!<CR>
 
 " reuse the previous yank with visual mode
 xnoremap p pgvy
+
+"" Align highlighted rows with common symbol
+" function! Align(symbol)
+	" execute "norm ^f" . a:symbol . "60i ^40lvwhx"
+" endfunction
+" command! -nargs=1 -range Align <line1>,<line2>call Align('<args>')
 
 " auto-complete parenthesis and quotes
 inoremap (<Tab> ()<Esc>i
@@ -95,9 +101,9 @@ inoremap [<Tab> []<Esc>i
 inoremap '<Tab> ''<Esc>i
 inoremap "<Tab> ""<Esc>i
 
-" make split
-nnoremap <C-b> :vert new<CR>
-nnoremap <S-b> :new<CR>
+"" make split
+"nnoremap <C-b> :vert new<CR>
+"nnoremap <S-b> :new<CR>
 
 " resize splits
 nnoremap <C-S-Up> <C-W>-
@@ -105,12 +111,7 @@ nnoremap <C-S-Down> <C-W>+
 nnoremap <C-S-Left> <C-W>< 
 nnoremap <C-S-Right> <C-W>>
 
-" navigate between splits
-nnoremap <C-Up> <C-W>k
-nnoremap <C-Down> <C-W>j
-nnoremap <C-Left> <C-W>h 
-nnoremap <C-Right> <C-W>l
-
+" CTRL-w h/j/k/l navigates vim splits
 " CTRL-W SHIFT-H/J/K/L rotates vim splits
 
 " create/close/navigate tabs
@@ -142,19 +143,8 @@ autocmd BufRead,BufNewFile,BufWritePost *.{go,py,r,cpp,h,c,sql} silent execute "
 " autocmd BufRead,BufNewFile,BufWritePost *.{go,py,r,cpp,h,c,sql} silent execute "!ctags.exe -R -a --exclude=.git"
 " choco install universal-ctags
 
-" ctags for function/variable specific completion
-" <C-x>] for ctags based completion
-" CTRL-] or g] to jump to tag definition
 " CTRL-o jumps back to last cursor position
 " CTRL-i jumps forward to previous cursor position
-" <C-W>] to horizontal split the definition
-" <C-W>[ to vertical split the definition
-nnoremap <C-w>[ :vert winc ]<CR>
-" <C-w>} preview of tag window
-" <C-w>z close preview window
-" :tags to show contents of tag stack
-" :tag <tag name> to jump to that dag (can use regex search in <tag name>)
-
 " CTRL-^ to jump back to previous file
 " TODO: buffers
 " N CTRL-^ to jump to N'th file/buffer (see :files or :buffers or :ls)
@@ -164,16 +154,25 @@ nnoremap <C-w>[ :vert winc ]<CR>
 " :[N]bd[elete] [N] unload buffer
 " e # opens the last closed buffer
 
+" ctags for function/variable specific completion
+" <C-x>] for ctags based completion
+" CTRL-] or g] to jump to tag definition
+" <C-W>] to horizontal split the definition
+" <C-W>[ to vertical split the definition
+nnoremap <C-w>[ :vert winc ]<CR>
+" <C-w>} preview of tag window
+" <C-w>z close preview window
+" :tags to show contents of tag stack
+" :tag <tag name> to jump to that tag (can use regex search in <tag name>)
+" browse oldfiles
+nnoremap <C-h> :browse oldfiles!<CR>
+
 " jumping to files
 " gf - go to path/to/file
 " gF - go to path/to/file:col
 " <C-w>f - go to path/to/file in new split window
 " <C-w>v+gf - go to path/to/file in new vert split window
 " <C-w>gf - go to path/to/file in new tab
-
-" browse oldfiles
-nnoremap <C-h> :browse oldfiles!<CR>
-
 
 " reopen last closed buffer
 augroup bufclosetrack
@@ -282,74 +281,51 @@ noremap <C-/> :call Commentary()<CR>
 
 " git
 " TODO: in vimdiff, see diffget etc for resolving conflicts
-" Command to show git graph
-if !exists(":GL") 
-    command GL  execute "vertical terminal git log --all --decorate --oneline --graph --no-abbrev-commit"
-endif
-if !exists(":GS") 
-    command GS  execute "vertical terminal git status"
-endif
-if !exists(":GR") 
-    command GR  execute "vertical terminal git reset"
-endif
-if !exists(":GA") 
-    command -nargs=* GA silent execute "!git add " . "<args>"
-                \ | execute "GS"
-endif
-if !exists(":GC") 
-    command GC  execute "vertical terminal git commit"
-endif
-if !exists(":GP") 
-    command GP  execute "vertical terminal git push"
-endif
-if !exists(":GPU") 
-    command GPU  execute "vertical terminal git pull"
-endif
-if !exists(":GM") 
-    command -nargs=1 GM  execute "vertical terminal git commit -m \"" . "<args>" . "\""
-endif
+nnoremap <C-g><C-l> :vert<Space>terminal<Space>++cols=80<Space>git<Space>log<Space>--all<Space>--decorate<Space>--oneline<Space>--graph<Space>--no-abbrev-commit<CR>
+nnoremap <C-g><C-s> :terminal<Space>++rows=15<Space>git<Space>status<CR>
+nnoremap <C-g><C-a> :terminal<Space>++rows=20<Space>git<Space>add<Space>-p<CR>
+nnoremap <C-g><C-c> :terminal<Space>++rows=20<Space>git<Space>commit<CR>
+nnoremap <C-g><C-p> :terminal<Space>++rows=10<Space>git<Space>push<CR>
+nnoremap <C-g>p     :terminal<Space>++rows=10<Space>git<Space>pull<CR>
+nnoremap <C-g>d     :call GitDiff(1)<CR><CR>
+nnoremap <C-g><C-d> :call GitDiffClose()<CR><CR>
 
 " Get current file diff with n'th commit.
 " Open current file and diff in new tab.
 " Also, provide a command to close that tab.
-if !exists(":GD") 
-    function! GitDiff(n)
-        let l:filename = bufname('%')
-        let l:filepath = getcwd()
-        execute "! git show HEAD~" . a:n . ":" . l:filename . " > /tmp/" . l:filename . "; printf \"[INFO] Getting " . l:filename . " version from " . a:n . " commit(s) back\\n\" "
-        execute "tabnew /tmp/" . l:filename
-        execute "vertical diffs " . l:filepath . "/" . l:filename
-    endfunction
-    function! GitDiffClose()
-        tabclose
-        execute "! rm -f /tmp/" . bufname('%') . "; printf \"[INFO] /tmp cleaned from the temp diff files\\n\""
-    endfunction
-    command -nargs=1 GD call GitDiff(<args>)
-    command GDC call GitDiffClose()
-endif
+function! GitDiff(n)
+	let l:filename = bufname('%')
+	let l:filepath = getcwd()
+	execute "! git show HEAD~" . a:n . ":" . l:filename . " > /tmp/" . l:filename . "; printf \"[INFO] Getting " . l:filename . " version from " . a:n . " commit(s) back\\n\" "
+	execute "tabnew /tmp/" . l:filename
+	execute "vertical diffs " . l:filepath . "/" . l:filename
+endfunction
+function! GitDiffClose()
+	tabclose
+	execute "! rm -f /tmp/" . bufname('%') . "; printf \"[INFO] /tmp cleaned from the temp diff files\\n\""
+endfunction
 
 " autogroups for makeprg
 augroup auMakeprg
 	autocmd Filetype go setlocal makeprg=go\ build
 augroup END
 
-" autocommands for Golang files
-function! VIMGO()
-	silent execute "!goimports -w %"
-	silent execute "!gofmt -s -e -w %"
-	silent execute "!go vet % 2> out"
-	silent execute "!sed -i 's/vet://g' out"
-	silent execute "!golint % >> out"
-	silent execute "e! %"
-	silent execute "redraw!"
-	silent execute "cfile out"
-	execute "copen"
-endfunction
-augroup vimGo
-    au BufWritePost *.go silent execute "call VIMGO()"
-	au VimLeave *.go silent execute "!rm out"
-augroup END
-
+"" autocommands for Golang files
+" function! VIMGO()
+	" silent execute "!goimports -w %"
+	" silent execute "!gofmt -s -e -w %"
+	" silent execute "!go vet % 2> out"
+	" silent execute "!sed -i 's/vet://g' out"
+	" silent execute "!golint % >> out"
+	" silent execute "e! %"
+	" silent execute "redraw!"
+	" silent execute "cfile out"
+	" execute "copen"
+" endfunction
+" augroup vimGo
+    " au BufWritePost *.go silent execute "call VIMGO()"
+	" au VimLeave *.go silent execute "!rm out"
+" augroup END
 
 " F4 to compile a program
 function! F4()
@@ -363,9 +339,6 @@ function! F4()
         silent execute "make"
 		execute "copen"
 		execute "wincmd p"
-        " execute "!go build"
-        " execute "redraw!"
-		" execute "vert term ./" . fnamemodify(getcwd(), ':t')
     " elseif l:ext == "<ext>"
         " execute ...
     endif
@@ -440,4 +413,3 @@ nmap <F5> :call F5()<CR>
 " * :files,buffers, ls
 " * tags, jumplist
 " * revisit keymappings to make them bit better
-" * mappings etc for different languages (see Go for example): py, r, etc
