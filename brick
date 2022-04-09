@@ -22,9 +22,9 @@ user=$(who)
 user=${user%% *}
 
 # packages
-gui="gnome-core firefox snapd gdm3"
+gui="gnome-core firefox snapd"
 privilege="sudo doas"
-developer="git curl vim-gtk exuberant-ctags golang"
+developer="git curl vim-gtk exuberant-ctags"
 # vim-gtk allows to copy to system clipboard
 # exuberant-ctags for vim autocomplete
 utility="htop xclip zip unzip"
@@ -38,4 +38,5 @@ chmod +x setup
 
 su -c "apt remove -y --autoremove $packages_list; \
 	apt list --installed | grep gnome | sed 's/\/.*//g' | xargs -I {} apt remove -y --autoremove \"{}\"; \
+	rm -rf /usr/local/go; \
 	systemctl reboot"

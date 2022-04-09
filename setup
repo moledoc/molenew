@@ -8,9 +8,9 @@ user=$(who)
 user=${user%% *}
 
 # packages
-gui="gnome-core gnome-screenshot gnome-tweaks gdm3"
+gui="gnome-core gnome-screenshot gnome-tweaks yaru-theme-gtk"
 privilege="doas"
-developer="git wget curl vim-gtk exuberant-ctags golang"
+developer="git wget curl vim-gtk exuberant-ctags"
 # vim-gtk allows to copy to system clipboard
 # exuberant-ctags for vim autocomplete
 utility="htop xclip zip unzip"
@@ -27,6 +27,9 @@ su -c "apt update -y && apt upgrade -y; \
 printf \"permit nopass ${user}\n\" > /usr/local/etc/doas.conf; \
 printf \"permit nopass ${user}\n\" > /etc/doas.conf; \
 printf \"\\\"\\C-l\\\": clear-screen\" >> /etc/inputrc; \
+wget --show-progress https://go.dev/dl/go1.18.linux-amd64.tar.gz; \
+tar -xzf go1.18.linux-amd64.tar.gz -C /usr/local/go; \
+rm go1.18.linux-amd64.tar.gz; \
 apt install --dry-run $packages_list; \
 apt install -y $packages_list; \
 systemctl reboot" 
