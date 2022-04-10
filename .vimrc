@@ -288,7 +288,7 @@ noremap <C-/> :call Commentary()<CR>
 nnoremap <C-g><C-l> :terminal<Space>++rows=20<Space>git<Space>log<Space>--all<Space>--decorate<Space>--oneline<Space>--graph<Space>--no-abbrev-commit<CR>
 nnoremap <C-g><C-s> :terminal<Space>++rows=15<Space>git<Space>status<CR>
 nnoremap <C-g><C-a> :terminal<Space>++rows=20<Space>git<Space>add<Space>-i<CR>
-nnoremap <C-g>c :terminal<Space>++rows=20<Space>git<Space>commit<CR>
+nnoremap <C-g>c     :terminal<Space>++rows=20<Space>git<Space>commit<CR>
 nnoremap <C-g><C-p> :terminal<Space>++rows=10<Space>git<Space>push<CR>
 nnoremap <C-g>p     :terminal<Space>++rows=10<Space>git<Space>pull<CR>
 nnoremap <C-g>d     :call GitDiff(1)<CR><CR>
