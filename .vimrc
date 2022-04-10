@@ -25,9 +25,9 @@ set mouse=a                 " enable mouse in every mode
 set encoding=utf-8          " sets the encoding used
 set fileencoding=utf-8      " sets the encoding for the file/buffer
 set showcmd                 " Show (partial) command in the last line of the screen
-set path+=**
-set modifiable
-set wildignore+=*.git,*.swp,tags
+set path+=**                " add parent path to search path
+"set modifiable              " buffers can be modified
+set wildignore+=.git/**,*.swp,tags,*.vim " excludes for lvimgrep
 
 " netrw (file explorer)
 " % makes new file while in Explorer
@@ -359,7 +359,7 @@ function! F5()
     if l:ext == "md"
 		silent execute "!pandoc --standalone --from markdown --to pdf -t latex --variable papersize=A4 -o " . l:base . ".pdf " . l:base . ".md"
     elseif l:ext == "go"
-		execute "term ++rows=10 ./" . fnamemodify(getcwd(), ':t')
+		execute "term ++rows=15 ./" . fnamemodify(getcwd(), ':t')
     elseif l:ext == "sh" || l:ext == "zsh" || l:ext == "bash"
         execute ":!./" . src
     " elseif l:ext == "<ext>"
