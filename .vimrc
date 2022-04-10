@@ -146,17 +146,21 @@ autocmd BufRead,BufNewFile,BufWritePost *.{go,py,r,cpp,h,c,sql} silent execute "
 " CTRL-o jumps back to last cursor position
 " CTRL-i jumps forward to previous cursor position
 " CTRL-^ to jump back to previous file
-" TODO: buffers
 " N CTRL-^ to jump to N'th file/buffer (see :files or :buffers or :ls)
 " :bn next buffer
 " :bp prev buffer
 " :bad[d] {filename} add file to buffer list without loading it
 " :[N]bd[elete] [N] unload buffer
 " e # opens the last closed buffer
+" TODO:
+" * :files,buffers, ls
+" * tags
+" * jumplist
+" * changes
 
 " ctags for function/variable specific completion
 " <C-x>] for ctags based completion
-" CTRL-] or g] to jump to tag definition
+" C-] or g] to jump to tag definition
 " <C-W>] to horizontal split the definition
 " <C-W>[ to vertical split the definition
 nnoremap <C-w>[ :vert winc ]<CR>
@@ -403,13 +407,7 @@ function! F3()
 	execute "redraw!"
 endfunction
 
-
 vmap <F2> :call F2()<CR>
 nmap <F3> :call F3()<CR>
 nmap <F4> :call F4()<CR>
 nmap <F5> :call F5()<CR>
-
-" TODO: 
-" * :files,buffers, ls
-" * tags, jumplist
-" * revisit keymappings to make them bit better
