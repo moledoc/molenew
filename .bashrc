@@ -101,7 +101,7 @@ fi
 # aliases
 
 # apt
-alias update="${ELEVATE} apt update;${ELEVATE} apt upgrade -y"
+alias update="${ELEVATE} apt update;${ELEVATE} apt full-upgrade -y"
 alias install="${ELEVATE} apt install"
 alias debinstall="${ELEVATE} dpkg -i"
 alias dryinstall="${ELEVATE} apt install --dry-run"
