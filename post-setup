@@ -68,6 +68,7 @@ google-chrome "github.com/login"
 
 printf "gnome keybindings\n"
 dconf load /org/gnome/desktop/wm/keybindings/ < $repo_loc/gnome-keybindings
+dconf load /org/gnome/terminal/legacy/keybindings/ < $repo_loc/gnome-terminal-keybindings
 
 printf "Cleanup\n"
 rm -v setup post-setup brick
