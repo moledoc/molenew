@@ -280,7 +280,7 @@ endfunction
 nnoremap <C-_> :call Commentary()<CR>
 vnoremap <C-_> :call Commentary()<CR>
 nnoremap <C-/> :call Commentary()<CR>
-noremap <C-/> :call Commentary()<CR>
+vnoremap <C-/> :call Commentary()<CR>
 
 
 " git
