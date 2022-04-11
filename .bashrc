@@ -101,7 +101,7 @@ fi
 # aliases
 
 # apt
-alias update="${ELEVATE} apt update;${ELEVATE} apt full-upgrade -y;alert"
+alias update="${ELEVATE} apt update;${ELEVATE} apt full-upgrade;alert"
 alias install="${ELEVATE} apt install"
 alias debinstall="${ELEVATE} dpkg -i"
 alias dryinstall="${ELEVATE} apt install --dry-run"
@@ -179,5 +179,5 @@ alias goc="go clean"
 alias got="go test -v -cover"
 alias gobw="GOOS=windows GOARCH=amd64 go build"
 
-# utiliteis
+# utilities
 alias wget="wget --show-progress"
