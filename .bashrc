@@ -149,8 +149,11 @@ alias g="cd $HOME/go/src/github.com/moledoc"
 
 # files
 alias cfb="$EDITOR $HOME/.bashrc"
-alias cfe="$EDITOR $HOME/.profile"
+alias cfp="$EDITOR $HOME/.profile"
 alias cfv="$EDITOR $HOME/.vimrc"
+alias srcb="source $HOME/.bashrc"
+alias srcp="source $HOME/.profile"
+alias srcv="source $HOME/.vimrc"
 alias todo="$EDITOR $HOME/todo"
 
 # systemctl
