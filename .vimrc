@@ -129,6 +129,13 @@ nnoremap <C-End> gt
 " nnoremap <C-y> :source Session.vim<CR>
 
 " autocomplete
+" using https://github.com/lifepillar/vim-mucomplete: wrapper for vim's built
+" in completion
+set completeopt+=menuone,noselect
+set shortmess+=c
+set belloff+=ctrlg
+let g:mucomplete#enable_auto_at_startup = 1
+
 " omni-complete with ctags for language specific completion
 set omnifunc=syntaxcomplete#Complete          " <C-x><C-o> for language specific completion
 au Syntax r runtime! syntax/r.vim
