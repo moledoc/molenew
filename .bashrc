@@ -161,6 +161,9 @@ alias sd="$ELEVATE systemctl poweroff"
 alias po="$ELEVATE systemctl poweroff"
 alias rb="$ELEVATE systemctl reboot"
 
+# utilities
+alias wget="wget --show-progress"
+
 # git
 alias ga="git add"
 alias gb="git branch"
@@ -182,5 +185,9 @@ alias goc="go clean"
 alias got="go test -v -cover"
 alias gobw="GOOS=windows GOARCH=amd64 go build"
 
-# utilities
-alias wget="wget --show-progress"
+# docker 
+alias ds="$ELEVATE docker ps"
+alias dr="$ELEVATE docker run"
+alias dre="$ELEVATE docker restart"
+alias dst="$ELEVATE docker stop"
+alias drm="$ELEVATE docker rm"
