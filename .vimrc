@@ -124,6 +124,7 @@ nnoremap <C-Home> gT
 nnoremap <C-End> gt
 
 "" save/load session
+autocmd BufWinLeave * silent execute "mksession!"
 " nnoremap <C-s> :w<CR>
 " nnoremap <C-M-s> :mksession!<CR>
 " nnoremap <C-y> :source Session.vim<CR>

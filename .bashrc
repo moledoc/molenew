@@ -155,6 +155,7 @@ alias srcb="source $HOME/.bashrc"
 alias srcp="source $HOME/.profile"
 alias srcv="source $HOME/.vimrc"
 alias todo="$EDITOR $HOME/todo"
+alias rs="vim -S Session.vim"
 
 # systemctl
 alias sd="$ELEVATE systemctl poweroff"
