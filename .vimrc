@@ -254,7 +254,7 @@ function! Commentary()
     elseif l:ext == "py"
         let l:comment = "# "
     " shell
-    elseif l:ext == "sh" || l:ext == "zsh" || l:ext == "bash" || expand('%') == ".bashrc" || expand('%') == "_bashrc"
+    elseif l:ext == "sh" || l:ext == "zsh" || l:ext == "bash" || expand('%') == ".bashrc" || expand('%') == "_bashrc" || l:ext == "yaml"
         let l:comment = "# "
     " html (and md)
     elseif l:ext == "html" || l:ext == "md"
