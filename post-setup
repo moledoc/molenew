@@ -70,10 +70,12 @@ printf "gnome keybindings\n"
 dconf load /org/gnome/desktop/wm/keybindings/ < $repo_loc/gnome-keybindings
 dconf load /org/gnome/terminal/legacy/keybindings/ < $repo_loc/gnome-terminal-keybindings
 
-printf "mucomplete - a wrapper for vim's built in completion"
+printf "installing mucomplete - a wrapper for vim's built in completion"
 mkdir -p ~/.vim/pack/bundle/start
-cd ~/.vim/pack/bundle/start && \
-git clone --depth 1 https://github.com/lifepillar/vim-mucomplete.git
+git clone --depth 1 https://github.com/lifepillar/vim-mucomplete.git ~/.vim/pack/bundle/start/vim-mucomplete
+
+printf "installing vimwiki"
+git clone https://github.com/vimwiki/vimwiki.git ~/.vim/pack/plugins/start/vimwiki
 
 printf "Cleanup\n"
 rm -v setup post-setup brick
