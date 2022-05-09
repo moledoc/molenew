@@ -185,6 +185,7 @@ alias gp="git push"
 alias gpu="git pull"
 alias gr="git reset"
 alias gs="git status"
+alias gbc="git branch --show-current"
 
 # go
 alias goi="go install"
