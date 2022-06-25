@@ -270,6 +270,9 @@ function! Commentary()
         let l:comment = "<!-- "
 		let l:comment_end = " -->"
 		let l:twosided = 1
+    " tex
+    elseif l:ext == "tex"
+        let l:comment = "% "
     " " css
     " elseif l:ext == "css"
         " let l:comment = "/* "
