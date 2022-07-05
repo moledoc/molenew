@@ -194,6 +194,7 @@ alias gob="go build"
 alias goc="go clean"
 alias got="go test -v -cover"
 alias gobw="GOOS=windows GOARCH=amd64 go build"
+alias gopt="cd ~/go;vim -c \"q\" test.go;exit"
 
 # docker 
 alias ds="$ELEVATE docker ps"
