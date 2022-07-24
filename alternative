@@ -18,7 +18,7 @@ dpkg -i google-chrome-stable_current_amd64.deb
 apt install -y pulseaudio alsa-utils"
 
 echo "setxkbmap -option caps:swapescape
-while xsetroot -name \"\`date \\\"+%a %F %R\\\"\`\"
+while xsetroot -name \"\`date \\\"+%a %F %R\\\"\`|`cat /sys/class/power_supply/BAT0/capacity`\"
 do 
 	sleep 60
 done &
