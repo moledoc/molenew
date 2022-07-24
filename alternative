@@ -1,0 +1,27 @@
+#!/bin/sh
+
+# Script to make alternative setup
+
+su -c "apt update -y && apt upgrade -y; apt install -y xorg libx11-dev libxft-dev libxinerama-dev clang git make wget curl"
+git clone https://git.suckless.org/dwm
+git clone https://git.suckless.org/st
+git clone https://git.suckless.org/dmenu
+
+su -c "cd dwm; make clean install; cd ../st; make clean install; cd ../dmenu; make clean install; cd .."
+su -c "cd st; make clean install; cd .."
+su -c "cd dmenu; make clean install; cd .."
+
+su -c "wget --show-progress \"https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb\"
+export PATH=\"$PATH:/usr/sbin\"
+apt-get -f install
+dpkg -i google-chrome-stable_current_amd64.deb
+apt install -y pulseaudio alsa-utils"
+
+echo "setxkbmap -option caps:swapescape
+while xsetroot -name \"\`date \\\"+%a %F %R\\\"\`\"
+do 
+	sleep 60
+done &
+amixer set 'Master' on
+amixer set 'Master' 30%
+exec dwm" > .xinitrc
