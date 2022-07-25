@@ -1,27 +1,60 @@
 #!/bin/sh
 
 # Script to make alternative setup
+su -c "apt update -y && apt upgrade -y; apt install -y xorg libx11-dev libxft-dev libxinerama-dev clang git make wget curl sxhkd doas pulseaudio alsa-utils
+echo \"permit $(whoami)\" > /etc/doas.conf"
+# doas ^
 
-su -c "apt update -y && apt upgrade -y; apt install -y xorg libx11-dev libxft-dev libxinerama-dev clang git make wget curl"
+# disable root password
+doas -- sed -i 's/root:x:0:0:root:\/root:\/bin\/bash/root:x:0:0:root:\/root:\/sbin\/nologin/g'
+
+# suckless
+# TODO: 1) make and apply own patches 2) keep modified builds in my repo
 git clone https://git.suckless.org/dwm
 git clone https://git.suckless.org/st
 git clone https://git.suckless.org/dmenu
 
-su -c "cd dwm; make clean install; cd ../st; make clean install; cd ../dmenu; make clean install; cd .."
-su -c "cd st; make clean install; cd .."
-su -c "cd dmenu; make clean install; cd .."
+cd dwm;   doas -- make clean install; cd ..
+cd st;    doas -- make clean install; cd ..
+cd dmenu; doas -- make clean install; cd ..
 
-su -c "wget --show-progress \"https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb\"
-export PATH=\"$PATH:/usr/sbin\"
-apt-get -f install
-dpkg -i google-chrome-stable_current_amd64.deb
-apt install -y pulseaudio alsa-utils"
+# google-chrome
+wget --show-progress "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
+export PATH="$PATH:/usr/sbin"
+doas -- apt-get -f install
+doas -- dpkg -i google-chrome-stable_current_amd64.deb
 
+# sxhkd
+mkdir -p .config/sxhkd
+echo "
+# sound: superuser.com/questions/1577281/xev-not-detecting-media-keys
+# NOTE: shift is temporary
+shift + XF86AudioMute
+	amixer set 'Master' toggle
+shift + XF86AudioRaiseVolume
+	amixer set 'Master' \"$sound_step\"+
+shift + XF86AudioMute
+	amixer set 'Master' \"$sound_step\"-
+
+# shift + XF86AudioPlayPause
+
+# brightness_step
+shift + XF86MonBrightnessUp
+	cat $(($(cat /sys/class/backlight/*/brightness)+$brightness_step)) | doas tee /sys/class/backlight/*/brightness
+shift + XF86MonBrightnessDown
+	cat $(($(cat /sys/class/backlight/*/brightness)-$brightness_step)) | doas tee /sys/class/backlight/*/brightness
+" > .config/sxhkd/sxhkdrc
+
+# .xinitrc
 echo "setxkbmap -option caps:swapescape
+export brightness_step=$(echo $(($(cat /sys/lass/backlight/*/max_brightness)/20)))
+export sound_step="5%"
 while xsetroot -name \"\`date \\\"+%a %F %R\\\"\`|`cat /sys/class/power_supply/BAT0/capacity`\"
 do 
 	sleep 60
 done &
 amixer set 'Master' on
 amixer set 'Master' 30%
+# pulseaudio --start &
 exec dwm" > .xinitrc
+startx
