@@ -1,9 +1,11 @@
 #!/bin/sh
 
+set -e
+
 # Script to make alternative setup
 su -c "apt update -y && apt upgrade -y; apt install -y xorg libx11-dev libxft-dev libxinerama-dev clang git make wget curl sxhkd doas pulseaudio alsa-utils
-echo \"permit persist $(whoami)
-permit nopass $(whoami) cmd /usr/bin/tee\" > /etc/doas.conf"
+echo \"permit nopass $(whoami)
+permit nopass $(whoami) cmd /usr/bin/tee args /sys/class/backlight/*/brightness\" > /etc/doas.conf"
 # doas ^
 
 # disable root password
@@ -28,6 +30,9 @@ doas -- dpkg -i google-chrome-stable_current_amd64.deb
 # keyboard default option
 doas -- sed -i 's/XKBOPTIONS=""/XKBOPTIONS="caps:swapescape"/g' /etc/default/keyboard
 
+# set doas back to permit for user
+doas -- sed -i "0,/nopass/permit" /etc/doas.conf
+
 # sxhkd
 mkdir -p .config/sxhkd
 echo "
@@ -36,18 +41,18 @@ echo "
 shift + XF86AudioMute
 	amixer set 'Master' toggle
 shift + XF86AudioRaiseVolume
-	amixer set 'Master' \"$sound_step\"+
-shift + XF86AudioMute
-	amixer set 'Master' \"$sound_step\"-
+	amixer set 'Master' \"\$sound_step\"+
+shift + XF86AudioLowerVolume
+	amixer set 'Master' \"\$sound_step\"-
 
-alt + tab
-	cur_map=$(setxkbmap -query | grep --color=no layout | sed 's/\ \|\t\|layout://g');if [[ "$cur_map" = us ]]; then new_map=ee; else new_map=us; fi; setxkbmap -option caps:swapescape $new_map
+#alt + shift
+#	cur_map=\$(setxkbmap -query | grep --color=no layout | sed 's/\ \|\t\|layout://g');if [[ "\$cur_map" = us ]]; then new_map=ee; else new_map=us; fi; setxkbmap -option caps:swapescape \$new_map
 
 # brightness_step
 shift + XF86MonBrightnessUp
-	cat $(($(cat /sys/class/backlight/*/brightness)+$brightness_step)) | doas tee /sys/class/backlight/*/brightness
+	cat \$((\$(cat /sys/class/backlight/*/brightness)+\$brightness_step)) | doas tee /sys/class/backlight/*/brightness
 shift + XF86MonBrightnessDown
-	cat $(($(cat /sys/class/backlight/*/brightness)-$brightness_step)) | doas tee /sys/class/backlight/*/brightness
+	cat \$((\$(cat /sys/class/backlight/*/brightness)-\$brightness_step)) | doas tee /sys/class/backlight/*/brightness
 " > .config/sxhkd/sxhkdrc
 
 # .xinitrc
@@ -60,6 +65,7 @@ do
 done &
 amixer set 'Master' on
 amixer set 'Master' 30%
+sxhkd &
 # pulseaudio --start &
 exec dwm" > .xinitrc
-startx
+systemctl reboot
