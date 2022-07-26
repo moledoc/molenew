@@ -2,7 +2,8 @@
 
 # Script to make alternative setup
 su -c "apt update -y && apt upgrade -y; apt install -y xorg libx11-dev libxft-dev libxinerama-dev clang git make wget curl sxhkd doas pulseaudio alsa-utils
-echo \"permit $(whoami)\" > /etc/doas.conf"
+echo \"permit persist $(whoami)
+permit nopass $(whoami) cmd /usr/bin/tee\" > /etc/doas.conf"
 # doas ^
 
 # disable root password
@@ -24,6 +25,9 @@ export PATH="$PATH:/usr/sbin"
 doas -- apt-get -f install
 doas -- dpkg -i google-chrome-stable_current_amd64.deb
 
+# keyboard default option
+doas -- sed -i 's/XKBOPTIONS=""/XKBOPTIONS="caps:swapescape"/g' /etc/default/keyboard
+
 # sxhkd
 mkdir -p .config/sxhkd
 echo "
@@ -36,7 +40,8 @@ shift + XF86AudioRaiseVolume
 shift + XF86AudioMute
 	amixer set 'Master' \"$sound_step\"-
 
-# shift + XF86AudioPlayPause
+alt + tab
+	cur_map=$(setxkbmap -query | grep --color=no layout | sed 's/\ \|\t\|layout://g');if [[ "$cur_map" = us ]]; then new_map=ee; else new_map=us; fi; setxkbmap -option caps:swapescape $new_map
 
 # brightness_step
 shift + XF86MonBrightnessUp
