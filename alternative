@@ -26,12 +26,14 @@ wget --show-progress "https://dl.google.com/linux/direct/google-chrome-stable_cu
 export PATH="$PATH:/usr/sbin"
 doas -- apt-get -f install
 doas -- dpkg -i google-chrome-stable_current_amd64.deb
+rm -f https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 
 # keyboard default option
 doas -- sed -i 's/XKBOPTIONS=""/XKBOPTIONS="caps:swapescape"/g' /etc/default/keyboard
 
 # set doas back to permit for user
 doas -- sed -i "0,/nopass/permit" /etc/doas.conf
+
 
 # sxhkd
 mkdir -p .config/sxhkd
@@ -40,13 +42,14 @@ echo "
 # NOTE: shift is temporary
 shift + XF86AudioMute
 	amixer set 'Master' toggle
+	notify-send \"\$(amixer set 'Master' toggle | grep -o --color=none '\[on\]\|\[off\]')\"
 shift + XF86AudioRaiseVolume
-	amixer set 'Master' \"\$sound_step\"+
+	notify-send \"\$(amixer set 'Master' \\\"\$sound_step\\\"+ | grep -oE --color=none '[0-9]{1,3}%')\"
 shift + XF86AudioLowerVolume
-	amixer set 'Master' \"\$sound_step\"-
+	notify-send \"\$(amixer set 'Master' \\\"\$sound_step\\\"- | grep -oE --color=none '[0-9]{1,3}%')\"
 
 #alt + shift
-#	cur_map=\$(setxkbmap -query | grep --color=no layout | sed 's/\ \|\t\|layout://g');if [[ "\$cur_map" = us ]]; then new_map=ee; else new_map=us; fi; setxkbmap -option caps:swapescape \$new_map
+#	cur_map=\$(setxkbmap -query | grep --color=no -oE \"us\|ee\");if [[ "\$cur_map" = us ]]; then new_map=ee; else new_map=us; fi; setxkbmap -option caps:swapescape \$new_map
 
 # brightness_step
 shift + XF86MonBrightnessUp
@@ -57,9 +60,11 @@ shift + XF86MonBrightnessDown
 
 # .xinitrc
 echo "setxkbmap -option caps:swapescape
-export brightness_step=$(echo $(($(cat /sys/lass/backlight/*/max_brightness)/20)))
+export max_brightness=$(cat /sys/class/backlight/*/max_brightness)
+export brightness_step=$(echo $(($max_brightness/20)))
 export sound_step="5%"
-while xsetroot -name \"\`date \\\"+%a %F %R\\\"\`|`cat /sys/class/power_supply/BAT0/capacity`\"
+export LESS=\"-R\"
+while xsetroot -name \"\`setxkbmap -query | grep --color=none -oE \\\"us\\\|ee\\\"\` | \`cat /sys/class/power_supply/BAT0/capacity\` | \`date \\\"+%a %F %R\\\"\`\"
 do 
 	sleep 60
 done &
@@ -70,3 +75,4 @@ pulseaudio --start &
 dunst & # notification receiver
 exec dwm" > .xinitrc
 does -- systemctl reboot
+
