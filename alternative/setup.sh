@@ -2,7 +2,7 @@
 
 user=$(whoami)
 # Script to make alternative setup
-su -c "apt update -y && apt upgrade -y; apt install -y xorg libx11-dev lbxft-dev libxinerama-dev clang git make wget curl sxhkd doas alsa-utils dunst pulseaudio
+su -c "apt update -y && apt upgrade -y; apt install -y xorg libx11-dev lbxft-dev libxinerama-dev clang git make wget curl sxhkd doas alsa-utils dunst pulseaudio zsh zsh-syntax-highlighting
 echo \"
 permit nopass $user
 permit nopass $user cmd /usr/bin/tee args /sys/class/backlight/*/brightness
