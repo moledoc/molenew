@@ -1,0 +1,2 @@
+#!/bin/sh
+cd $(find $HOME -type d | grep -v ".git\|.local/lib" | fzf --prompt="$(pwd) > ")

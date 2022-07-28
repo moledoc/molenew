@@ -1,0 +1,2 @@
+#!/bin/sh
+xdg-open $(find $HOME -type f | grep -v ".git\|.local/lib" | fzf --prompt="$(pwd) > ")

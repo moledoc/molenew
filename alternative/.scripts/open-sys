@@ -1,0 +1,2 @@
+#!/bin/sh
+xdg-open $(doas -- find / -type d -path /run -prune -o -print |  fzf --prompt="$(pwd) > ")
