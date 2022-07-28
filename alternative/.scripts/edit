@@ -1,0 +1,5 @@
+#!/bin/sh
+echo "$@" > /tmp/buf.sh
+vi /tmp/buf.sh
+test -f /tmp/buf.sh && $(cat /tmp/buf.sh)
+rm -f /tmp/buf.sh
