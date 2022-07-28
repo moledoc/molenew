@@ -1,3 +1,0 @@
-#!/bin/sh
-# $1 if you can narrow down your search
-xdg-open $(find $HOME -type f | grep "$1" | grep -v ".git\|.local/lib" | fzf --prompt="$(pwd) > ")

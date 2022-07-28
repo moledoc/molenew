@@ -3,9 +3,9 @@
 # for example `. <cmd> <filter>
 # also print out the dir, if forgot to prepend the dot so can just copy paste the full path if necessary, or use the value itself.
 filter=$(test -z "$1" && echo ".*/Documents.*\|.*/Downloads.*\|.*/go/src.*\|.*/\.scripts.*\|.*/\.config.*" || echo ".*/$1")
-cd $(find $HOME \
+open=$(find $HOME \
 	-regextype sed -iregex ".*/\.git.*" -prune \
 	-o -regextype sed -iregex "$filter" \
-	-type d \
-	-print | fzf --prompt="$(pwd) > ")
-pwd
+	-type f \
+	-print | fzf --prompt="$(pwd) > ") 
+xdg-open "$open" & > /dev/null

@@ -1,3 +1,0 @@
-#!/bin/sh
-# $1 if you can narrow down your search
-cd $(doas -- find / -type d -path /run -o -path /home -prune -o -print | grep "$1" |  fzf --prompt="$(pwd) > ")
