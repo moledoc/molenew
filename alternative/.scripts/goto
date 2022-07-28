@@ -1,2 +1,3 @@
 #!/bin/sh
-cd $(find $HOME -type d | grep -v ".git\|.local/lib" | fzf --prompt="$(pwd) > ")
+# $1 if you can narrow down your search
+find $HOME -type d | grep "$1" | grep -v ".git\|.local/lib" | fzf --prompt="$(pwd) > "

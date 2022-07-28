@@ -1,2 +1,3 @@
 #!/bin/sh
-xdg-open $(doas -- find / -type d -path /run -prune -o -print |  fzf --prompt="$(pwd) > ")
+# $1 if you can narrow down your search
+xdg-open $(doas -- find / -type d -path /run -o -path /home -prune -o -print | grep "$1" |  fzf --prompt="$(pwd) > ")
