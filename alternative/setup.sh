@@ -59,5 +59,4 @@ ln -s ".scripts" "/home/$user/.scripts"
 ln -s ".xinitrc" "/home/$user/.xinitrc"
 ln -s ".profile" "/home/$user/.profile"
 
-does -- systemctl reboot
-
+doas -- systemctl reboot
