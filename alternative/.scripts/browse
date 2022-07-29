@@ -1,0 +1,5 @@
+#!/bin/sh
+# simplify most visited sites
+isFreq=$(echo "youtube\|google" | grep --color=none -o "$1")
+site=$(test -n "$isFreq" && echo "https://$1.com" || echo "$1")
+xdg-open $site > /dev/null 2>&1
