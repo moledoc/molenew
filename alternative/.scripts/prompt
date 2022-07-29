@@ -1,0 +1,3 @@
+#!/bin/sh
+p=$(test -z "$1" && echo "$(pwd)" || echo "$1")
+echo "$p$(parse-git-branch)"
