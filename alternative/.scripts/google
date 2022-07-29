@@ -1,0 +1,3 @@
+#!/bin/sh
+searchTerm=$(echo "$@" | sed 's/ /+/g')
+xdg-open "https://google.com/search?q=$searchTerm" > /dev/null 2>&1
