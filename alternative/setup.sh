@@ -1,8 +1,10 @@
 #!/bin/sh
 
+set -e
+
 user=$(whoami)
 # Script to make alternative setup
-su -c "apt update -y && apt upgrade -y; apt install -y xorg libx11-dev libxft-dev libxinerama-dev clang git make wget curl sxhkd doas alsa-utils dunst pulseaudio libedit-dev autotools-dev fzf tmux universal-ctags
+su -c "apt update -y && apt upgrade -y; apt install -y xorg libx11-dev libxft-dev libxinerama-dev clang git make wget curl sxhkd doas alsa-utils dunst pulseaudio libedit-dev autotools-dev automake fzf tmux universal-ctags
 echo \"
 permit nopass $user
 permit nopass $user cmd /usr/bin/tee args /sys/class/backlight/*/brightness
@@ -34,29 +36,28 @@ chsh -s /bin/dash-login
 # google-chrome
 wget --show-progress "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
 export PATH="$PATH:/usr/sbin"
+doas -- dpkg -i google-chrome-stable_current_amd64.deb # TODO: fails here, add package to install
 doas -- apt-get -f install
-# doas -- dpkg -i google-chrome-stable_current_amd64.deb
 rm -f https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 
 # keyboard default option
 doas -- sed -i 's/XKBOPTIONS=""/XKBOPTIONS="caps:swapescape"/g' /etc/default/keyboard
 
 # set doas back to permit for user
-doas -- sed -i "0,/nopass/permit" /etc/doas.conf
+# doas -- sed -i '0,/nopass/persist' /etc/doas.conf # TODO: might not be correct
 
-# mkdirs
-mkdir -p .config/sxhkd
-mkdir -p .scripts
+# clean files before linking
+rm -fr "$HOME/.config" "$HOME/.scripts"
+rm -f "$HOME/.xinitrc" "$HOME/.profile"
 
 # link files
-rm -fr "/home/$user/.config" "/home/$user/.scripts"
-rm -f "/home/$user/.xinitrc" "/home/$user/.profile"
-
 # ln -s ".vimrc" "/home/$user/.vimrc"
 # ln -s ".bashrc" "/home/$user/.bashrc"
-ln -s ".config" "/home/$user/.config"
-ln -s ".scripts" "/home/$user/.scripts"
-ln -s ".xinitrc" "/home/$user/.xinitrc"
-ln -s ".profile" "/home/$user/.profile"
+ln -s "$HOME/.config"  "$HOME/.config"
+ln -s "$HOME/.scripts" "$HOME/.scripts"
+ln -s "$HOME/.xinitrc" "$HOME/.xinitrc"
+ln -s "$HOME/.profile" "$HOME/.profile"
+
+# TODO: add scripts to path
 
 doas -- systemctl reboot

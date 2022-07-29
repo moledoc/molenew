@@ -1,4 +1,5 @@
 #!/bin/sh
+# dash-extended has vi-mode: <esc>v
 echo "$@" > /tmp/buf.sh
 vi /tmp/buf.sh
 test -f /tmp/buf.sh && $(cat /tmp/buf.sh)
