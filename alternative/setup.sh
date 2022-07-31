@@ -4,7 +4,9 @@ set -e
 user=$(whoami)
 
 # Script to make alternative setup
-su -c "apt update -y && apt upgrade -y; apt install -y xorg libx11-dev libxft-dev libxinerama-dev clang git make wget curl sxhkd doas alsa-utils dunst pulseaudio libedit-dev autotools-dev automake fzf tmux universal-ctags chromium xclip xsel
+$packages="xorg libx11-dev libxft-dev libxinerama-dev clang git make wget curl sxhkd doas alsa-utils dunst pulseaudio libedit-dev autotools-dev automake fzf tmux universal-ctags chromium xclip xsel"
+su -c "apt install --dry-run $packages
+apt update -y && apt upgrade -y; apt install -y $packages
 echo \"permit nopass $user
 permit nopass $user cmd /usr/bin/tee args /sys/class/backlight/*/brightness
 \" > /etc/doas.conf"
