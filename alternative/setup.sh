@@ -41,11 +41,11 @@ chsh -s /bin/dash-login
 
 # keyboard default option
 test -d /etc/default || doas -- mkdir -v /etc/default
-test -f /etc/default/keyboard || doas -- touch /etc/default/keyboard
+test -f /etc/default/keyboard || echo 'XKBOPTIONS=""' | doas -- tee /etc/default/keyboard
 doas -- sed -i 's/XKBOPTIONS=""/XKBOPTIONS="caps:swapescape"/g' /etc/default/keyboard
 
 # set doas back to permit for user
-doas -- sed -i '1,1s/nopass/persist' /etc/doas.conf
+doas -- sed -i '1,1s/nopass/persist/' /etc/doas.conf
 
 # clean files before linking
 rm -fr "$HOME/.config" "$HOME/.scripts"
