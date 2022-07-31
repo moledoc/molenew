@@ -4,7 +4,7 @@ set -e
 user=$(whoami)
 
 # Script to make alternative setup
-$packages="xorg libx11-dev libxft-dev libxinerama-dev clang git make wget curl sxhkd doas alsa-utils dunst pulseaudio libedit-dev autotools-dev automake fzf tmux universal-ctags chromium xclip xsel"
+$packages="xorg libx11-dev libxft-dev libxinerama-dev clang git make wget curl sxhkd doas alsa-utils dunst pulseaudio libedit-dev autotools-dev automake fzf tmux universal-ctags chromium libnotify-bin xclip xsel"
 su -c "apt install --dry-run $packages
 apt update -y && apt upgrade -y; apt install -y $packages
 echo \"permit nopass $user
@@ -27,7 +27,7 @@ cd dmenu; doas -- make clean install; cd ..
 # dash with extended functionality
 git clone https://git.kernel.org/pub/scm/utils/dash/dash.git
 cd dash ;./autogen.sh ;./configure --with-libedit ;make;doas -- cp src/dash /bin/dash-extended;cd ..
-echo "/bin/dash-extended -iV" | doas tee /bin/dash-login
+echo "/bin/dash-extended -CiVl" | doas tee /bin/dash-login
 doas -- chmod +x /bin/dash-login
 echo "/bin/dash-login" | doas -- tee -a /etc/shells
 chsh -s /bin/dash-login
@@ -54,9 +54,10 @@ rm -f "$HOME/.xinitrc" "$HOME/.profile"
 # link files
 # ln -s ".vimrc" "/home/$user/.vimrc"
 # ln -s ".bashrc" "/home/$user/.bashrc"
-ln -s "$HOME/.config"  "$HOME/.config"
-ln -s "$HOME/.scripts" "$HOME/.scripts"
-ln -s "$HOME/.xinitrc" "$HOME/.xinitrc"
-ln -s "$HOME/.profile" "$HOME/.profile"
+path=$(pwd)
+ln -s "$path/.config"  "$HOME/.config"
+ln -s "$path/.scripts" "$HOME/.scripts"
+ln -s "$path/.xinitrc" "$HOME/.xinitrc"
+ln -s "$path/.profile" "$HOME/.profile"
 
 doas -- systemctl reboot
